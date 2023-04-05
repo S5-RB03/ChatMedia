@@ -1,4 +1,4 @@
-package com.sevyh.sevyhchatmediaservice.sevyhchatmediaservice;
+package com.sevyh.sevyhchatmediaservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

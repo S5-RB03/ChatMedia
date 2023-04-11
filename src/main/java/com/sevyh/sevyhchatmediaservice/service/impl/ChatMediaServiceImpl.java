@@ -28,7 +28,7 @@ public class ChatMediaServiceImpl implements ChatMediaService {
     }
 
     @Override
-    public ChatMessage createChatMessageWithMedia(UUID userId, String content, MultipartFile media, String createdAt) {
+    public ChatMessage createChatMessageWithMedia(UUID userId, String content, MultipartFile media, LocalDateTime createdAt) {
         // Save the media and get its metadata
         MediaMetadata mediaMetadata = mediaStorageService.storeMediaAndGetMetadata(media);
 
@@ -40,7 +40,7 @@ public class ChatMediaServiceImpl implements ChatMediaService {
         chatMessage.setUserId(userId);
         chatMessage.setContent(content);
         chatMessage.setMediaMetadata(mediaMetadata);
-        chatMessage.setCreatedAt(LocalDateTime.parse(createdAt));
+        chatMessage.setCreatedAt(createdAt);
 
 
         // Save the chat message in the database
@@ -58,5 +58,4 @@ public class ChatMediaServiceImpl implements ChatMediaService {
     public MediaMetadata getMediaMetadataById(UUID mediaId) {
         return mediaMetadataRepository.findById(mediaId).orElse(null);
     }
-
 }

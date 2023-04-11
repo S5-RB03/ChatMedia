@@ -2,8 +2,13 @@ package com.sevyh.sevyhchatmediaservice.api.model;
 
 import java.util.UUID;
 
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
+
+@Table("media_metadata")
 public class MediaMetadata {
 
+    @PrimaryKey
     private UUID id;
     private String mediaType;
     private long size;

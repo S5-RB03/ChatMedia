@@ -1,9 +1,12 @@
 package com.sevyh.sevyhchatmediaservice.repository;
 
 import com.sevyh.sevyhchatmediaservice.api.model.MediaMetadata;
-import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-public interface MediaMetadataRepository extends JpaRepository<MediaMetadata, UUID> {
+@Repository
+public interface MediaMetadataRepository extends CassandraRepository<MediaMetadata, UUID> {
 }

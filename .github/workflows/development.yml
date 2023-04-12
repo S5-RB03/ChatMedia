@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - Development
+      - main
   pull_request_review:
     types:
       - submitted

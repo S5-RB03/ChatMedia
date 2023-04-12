@@ -17,7 +17,7 @@ jobs:
         image: cassandra:latest
         ports:
           - 9043:9042
-        options: --name cassandra-chatmedia
+        options: --name cassandra
         
     steps:
       - name: Checkout code
@@ -43,7 +43,7 @@ jobs:
         run: |
           echo "CREATE KEYSPACE IF NOT EXISTS chatmedia_keyspace WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};" > schema.cql
           echo "CREATE TABLE IF NOT EXISTS media_metadata (id UUID PRIMARY KEY, media_type TEXT, size BIGINT, url TEXT);" >> schema.cql
-          docker run --rm --network host -v ${PWD}:/workspace -w /workspace --entrypoint=cqlsh cassandra -f schema.cql
+          docker run --rm --network container:cassandra -v ${PWD}:/workspace -w /workspace --entrypoint=cqlsh cassandra -f schema.cql
       - name: Build and test
         env:
           SPRING_DATASOURCE_URL: "jdbc:cassandra://localhost:9043/chatmedia_keyspace"

@@ -43,10 +43,10 @@ jobs:
         run: |
           echo "CREATE KEYSPACE IF NOT EXISTS chatmedia_keyspace WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};" > schema.cql
           echo "CREATE TABLE IF NOT EXISTS media_metadata (id UUID PRIMARY KEY, media_type TEXT, size BIGINT, url TEXT);" >> schema.cql
-          docker run --rm --network container:cassandra-chatmedia -v ${PWD}:/workspace -w /workspace --entrypoint=cqlsh cassandra -f schema.cql
+          docker run --rm --network host -v ${PWD}:/workspace -w /workspace --entrypoint=cqlsh cassandra -f schema.cql
       - name: Build and test
         env:
-          SPRING_DATASOURCE_URL: "jdbc:cassandra://localhost:9043/media_metadata"
+          SPRING_DATASOURCE_URL: "jdbc:cassandra://localhost:9043/chatmedia_keyspace"
         run: mvn -B clean verify
 
       - name: Deploy

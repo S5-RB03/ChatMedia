@@ -1,4 +1,4 @@
-package com.sevyh.sevyhchatmediaservice.sevyhchatmediaservice;
+package com.sevyh.sevyhchatmediaservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

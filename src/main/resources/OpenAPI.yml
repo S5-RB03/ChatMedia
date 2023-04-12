@@ -1,0 +1,43 @@
+openapi: '3.0.2'
+info:
+  title: Sevyh Chat Media Service
+  description: This is the API for the Sevyh Chat Media Service
+  version: 0.1
+servers:
+  - url: 'http://localhost:8080'
+    description: Localhost
+paths:
+  /photo:
+    post:
+      summary: Upload a photo
+      description: Upload a photo to the server
+      operationId: uploadPhoto
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+

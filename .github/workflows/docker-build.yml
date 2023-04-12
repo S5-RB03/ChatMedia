@@ -3,11 +3,9 @@ name: Docker Publish Workflow
 on:
   pull_request:
     branches:
-      - Development
-  pull_request_review:
+      - main
     types:
-      - submitted
-
+      - closed
 jobs:
   build_and_test:
     runs-on: ubuntu-latest

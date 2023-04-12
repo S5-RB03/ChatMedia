@@ -16,7 +16,7 @@ jobs:
       cassandra:
         image: cassandra:latest
         ports:
-          - 9043:9042
+          - 9042:9042
         options: --name cassandra
         
     steps:
@@ -47,7 +47,7 @@ jobs:
           docker run --rm --network container:cassandra -v ${PWD}:/workspace -w /workspace --entrypoint=cqlsh cassandra -f schema.cql
       - name: Build and test
         env:
-          SPRING_DATASOURCE_URL: "jdbc:cassandra://localhost:9043/chatmedia_keyspace"
+          SPRING_DATASOURCE_URL: "jdbc:cassandra://localhost:9042/chatmedia_keyspace"
         run: mvn -B clean verify
 
       - name: Deploy

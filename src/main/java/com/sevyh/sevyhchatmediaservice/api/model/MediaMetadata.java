@@ -10,18 +10,19 @@ public class MediaMetadata {
 
     @PrimaryKey
     private UUID id;
+    private UUID conversationId;
     private String mediaType;
     private long size;
-    private String url;
+    private String fileLocation;
 
     public MediaMetadata() {
     }
 
-    public MediaMetadata(UUID id, String mediaType, long size, String url) {
+    public MediaMetadata(UUID id, String mediaType, long size, String fileLocation) {
         this.id = id;
         this.mediaType = mediaType;
         this.size = size;
-        this.url = url;
+        this.fileLocation = fileLocation;
     }
 
     public UUID getId() {
@@ -30,6 +31,14 @@ public class MediaMetadata {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(UUID conversationId) {
+        this.conversationId = conversationId;
     }
 
     public String getMediaType() {
@@ -48,12 +57,12 @@ public class MediaMetadata {
         this.size = size;
     }
 
-    public String getUrl() {
-        return url;
+    public String getfileLocation() {
+        return fileLocation;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setfileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
     }
 
 }

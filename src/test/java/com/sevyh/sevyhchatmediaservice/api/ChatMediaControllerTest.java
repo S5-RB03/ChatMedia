@@ -1,6 +1,6 @@
 package com.sevyh.sevyhchatmediaservice.api;
 
-import com.sevyh.sevyhchatmediaservice.api.model.ChatMessage;
+import com.sevyh.sevyhchatmediaservice.api.model.Message;
 import com.sevyh.sevyhchatmediaservice.api.model.MediaMetadata;
 import com.sevyh.sevyhchatmediaservice.service.ChatMediaService;
 import org.junit.jupiter.api.Test;

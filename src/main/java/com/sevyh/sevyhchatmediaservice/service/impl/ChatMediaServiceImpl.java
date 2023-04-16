@@ -1,34 +1,36 @@
 package com.sevyh.sevyhchatmediaservice.service.impl;
 
-import com.sevyh.sevyhchatmediaservice.api.model.ChatMessage;
+import com.sevyh.sevyhchatmediaservice.api.model.Message;
+import com.sevyh.sevyhchatmediaservice.api.model.MessageType;
 import com.sevyh.sevyhchatmediaservice.api.model.MediaMetadata;
-import com.sevyh.sevyhchatmediaservice.repository.ChatMessageRepository;
+import com.sevyh.sevyhchatmediaservice.repository.MessageRepository;
 import com.sevyh.sevyhchatmediaservice.repository.MediaMetadataRepository;
 import com.sevyh.sevyhchatmediaservice.service.ChatMediaService;
 import com.sevyh.sevyhchatmediaservice.service.MediaStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
 public class ChatMediaServiceImpl implements ChatMediaService {
 
-    private final ChatMessageRepository chatMessageRepository;
+    private final MessageRepository MessageRepository;
     private final MediaMetadataRepository mediaMetadataRepository;
     private final MediaStorageService mediaStorageService;
 
-    public ChatMediaServiceImpl(ChatMessageRepository chatMessageRepository,
+    public ChatMediaServiceImpl(MessageRepository MessageRepository,
                                  MediaMetadataRepository mediaMetadataRepository,
                                  MediaStorageService mediaStorageService) {
-        this.chatMessageRepository = chatMessageRepository;
+        this.MessageRepository = MessageRepository;
         this.mediaMetadataRepository = mediaMetadataRepository;
         this.mediaStorageService = mediaStorageService;
     }
 
     @Override
-    public ChatMessage createChatMessageWithMedia(UUID userId, String content, MultipartFile media, LocalDateTime createdAt) {
+    public Message createMessageWithMedia(UUID senderId, UUID receiverId, String textContent, Instant timestamp, MessageType messageType, MultipartFile media) {
         // Save the media and get its metadata
         MediaMetadata mediaMetadata = mediaStorageService.storeMediaAndGetMetadata(media);
 
@@ -36,22 +38,24 @@ public class ChatMediaServiceImpl implements ChatMediaService {
         mediaMetadataRepository.save(mediaMetadata);
 
         // Create a new chat message
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setUserId(userId);
-        chatMessage.setContent(content);
-        chatMessage.setMediaMetadata(mediaMetadata);
-        chatMessage.setCreatedAt(createdAt);
+        Message message = new Message(
+            senderId,
+            receiverId,
+            textContent,
+            timestamp,
+            messageType
+        );
 
 
         // Save the chat message in the database
-        chatMessageRepository.save(chatMessage);
+        MessageRepository.save(message);
 
-        return chatMessage;
+        return message;
     }
 
     @Override
-    public ChatMessage getChatMessageById(UUID messageId) {
-        return chatMessageRepository.findById(messageId).orElse(null);
+    public Message getMessageById(UUID messageId) {
+        return MessageRepository.findById(messageId).orElse(null);
     }
 
     @Override

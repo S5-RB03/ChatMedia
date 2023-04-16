@@ -16,10 +16,13 @@ public class Message {
     public Message() {
     }
 
-    public Message(UUID id, UUID conversationId, UUID senderId, UUID receiverId, Instant timestamp, MessageType messageType) {
-        this(id, conversationId, null, senderId, receiverId, timestamp, messageType);
+    public Message(UUID senderId, UUID receiverId, String textContent, Instant timestamp, MessageType messageType) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.textContent = textContent;
+        this.timestamp = timestamp;
+        this.messageType = messageType;
     }
-
 
     public Message(UUID id, UUID conversationId, String textContent, UUID senderId, UUID receiverId, Instant timestamp, MessageType messageType) {
         this.id = id;

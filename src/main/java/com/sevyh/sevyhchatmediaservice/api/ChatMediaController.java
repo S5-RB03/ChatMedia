@@ -1,7 +1,8 @@
 package com.sevyh.sevyhchatmediaservice.api;
 
 import com.sevyh.sevyhchatmediaservice.api.model.ApiResponse;
-import com.sevyh.sevyhchatmediaservice.api.model.ChatMessage;
+import com.sevyh.sevyhchatmediaservice.api.model.Message;
+import com.sevyh.sevyhchatmediaservice.api.model.MessageType;
 import com.sevyh.sevyhchatmediaservice.api.model.MediaMetadata;
 import com.sevyh.sevyhchatmediaservice.service.ChatMediaService;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,20 +25,23 @@ public class ChatMediaController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ChatMessage>> createChatMessageWithMedia(
-            @RequestParam("userId") UUID userId,
-            @RequestParam("content") String content,
+    public ResponseEntity<ApiResponse<Message>> createMessageWithMedia(
+            @RequestParam("senderId") UUID senderId,
+            @RequestParam("receiverId") UUID receiverId,
+            @RequestParam("textContent") String textContent,
+            @RequestParam("timestamp") Instant timestamp,
+            @RequestParam("messageType") MessageType messageType,
             @RequestParam("media") MultipartFile media,
-            @RequestParam("createdAt") LocalDateTime createdAt) {
-        ChatMessage chatMessage = chatMediaService.createChatMessageWithMedia(userId, content, media, createdAt);
-        ApiResponse<ChatMessage> response = new ApiResponse<>(true, "Chat message created successfully", chatMessage);
+            @RequestParam("createdAt") Instant createdAt) {
+        Message Message = chatMediaService.createMessageWithMedia(senderId, receiverId, textContent, timestamp, messageType, media);
+        ApiResponse<Message> response = new ApiResponse<>(true, "Chat message created successfully", Message);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{messageId}")
-    public ResponseEntity<ApiResponse<ChatMessage>> getChatMessageById(@PathVariable UUID messageId) {
-        ChatMessage chatMessage = chatMediaService.getChatMessageById(messageId);
-        ApiResponse<ChatMessage> response = new ApiResponse<>(true, "Chat message retrieved successfully", chatMessage);
+    public ResponseEntity<ApiResponse<Message>> getMessageById(@PathVariable UUID messageId) {
+        Message Message = chatMediaService.getMessageById(messageId);
+        ApiResponse<Message> response = new ApiResponse<>(true, "Chat message retrieved successfully", Message);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

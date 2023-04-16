@@ -10,9 +10,12 @@
 4. `CREATE KEYSPACE IF NOT EXISTS chatmedia_keyspace WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};`
 5. `USE chatmedia_keyspace;`
 6. `CREATE TABLE IF NOT EXISTS media_metadata (
-    id UUID PRIMARY KEY,
+    conversation_id UUID,
+    media_id UUID,
     media_type TEXT,
     size BIGINT,
-    url TEXT
-);`
+    file_location TEXT,
+    timestamp TIMESTAMP,
+    PRIMARY KEY(conversation_id, timestamp)
+) WITH CLUSTERING ORDER BY (timestamp DESC);`
 7. Done!

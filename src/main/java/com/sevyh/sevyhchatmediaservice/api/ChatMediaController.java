@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -29,10 +28,9 @@ public class ChatMediaController {
             @RequestParam("senderId") UUID senderId,
             @RequestParam("receiverId") UUID receiverId,
             @RequestParam("textContent") String textContent,
-            @RequestParam("timestamp") Instant timestamp,
             @RequestParam("messageType") MessageType messageType,
-            @RequestParam("media") MultipartFile media,
-            @RequestParam("createdAt") Instant createdAt) {
+            @RequestParam("media") MultipartFile media) {
+        Instant timestamp = Instant.now();
         Message Message = chatMediaService.createMessageWithMedia(senderId, receiverId, textContent, timestamp, messageType, media);
         ApiResponse<Message> response = new ApiResponse<>(true, "Chat message created successfully", Message);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

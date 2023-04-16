@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -31,12 +30,6 @@ public class ChatMediaServiceImpl implements ChatMediaService {
 
     @Override
     public Message createMessageWithMedia(UUID senderId, UUID receiverId, String textContent, Instant timestamp, MessageType messageType, MultipartFile media) {
-        // Save the media and get its metadata
-        MediaMetadata mediaMetadata = mediaStorageService.storeMediaAndGetMetadata(media);
-
-        // Save the media metadata in the database
-        mediaMetadataRepository.save(mediaMetadata);
-
         // Create a new chat message
         Message message = new Message(
             senderId,
@@ -46,9 +39,14 @@ public class ChatMediaServiceImpl implements ChatMediaService {
             messageType
         );
 
+        // generate a random UUID for the message
+        message.setMessageId(UUID.randomUUID());
 
-        // Save the chat message in the database
-        MessageRepository.save(message);
+        // Save the media and get its metadata
+        MediaMetadata mediaMetadata = mediaStorageService.storeMediaAndGetMetadata(media, senderId, receiverId);
+
+        // Save the media metadata in the database
+        mediaMetadataRepository.save(mediaMetadata);
 
         return message;
     }
@@ -62,4 +60,5 @@ public class ChatMediaServiceImpl implements ChatMediaService {
     public MediaMetadata getMediaMetadataById(UUID mediaId) {
         return mediaMetadataRepository.findById(mediaId).orElse(null);
     }
+    
 }

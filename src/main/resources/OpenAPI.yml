@@ -1,43 +1,147 @@
-openapi: '3.0.2'
+openapi: 3.0.3
 info:
   title: Sevyh Chat Media Service
-  description: This is the API for the Sevyh Chat Media Service
-  version: 0.1
+  version: 1.0.0
 servers:
-  - url: 'http://localhost:8080'
-    description: Localhost
+  - url: /api/v1/chatmedia
 paths:
-  /photo:
+  /:
     post:
-      summary: Upload a photo
-      description: Upload a photo to the server
-      operationId: uploadPhoto
+      summary: Create a new message with media
       requestBody:
+        required: true
         content:
           multipart/form-data:
             schema:
               type: object
               properties:
-                file:
+                senderId:
+                  type: string
+                  format: uuid
+                receiverId:
+                  type: string
+                  format: uuid
+                textContent:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+                messageType:
+                  $ref: '#/components/schemas/MessageType'
+                media:
                   type: string
                   format: binary
+                createdAt:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Chat message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseMessage'
+        '400':
+          description: Bad request
+  /{messageId}:
+    get:
+      summary: Get a chat message by ID
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
-          description: OK
+          description: Chat message retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Photo'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/ApiResponseMessage'
+        '404':
+          description: Message not found
+  /media/{mediaId}:
+    get:
+      summary: Get media metadata by ID
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Media metadata retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
+                $ref: '#/components/schemas/ApiResponseMediaMetadata'
+        '404':
+          description: Media metadata not found
+components:
+  schemas:
+    MessageType:
+      type: string
+      enum:
+        - TEXT
+        - IMAGE
+        - VIDEO
+    Message:
+      type: object
+      properties:
+        messageId:
+          type: string
+          format: uuid
+        conversationId:
+          type: string
+          format: uuid
+        textContent:
+          type: string
+        senderId:
+          type: string
+          format: uuid
+        receiverId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        messageType:
+          $ref: '#/components/schemas/MessageType'
+    MediaMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        conversationId:
+          type: string
+          format: uuid
+        mediaType:
+          type: string
+        size:
+          type: integer
+          format: int64
+        fileLocation:
+          type: string
+    ApiResponseMessage:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Message'
+    ApiResponseMediaMetadata:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/MediaMetadata'

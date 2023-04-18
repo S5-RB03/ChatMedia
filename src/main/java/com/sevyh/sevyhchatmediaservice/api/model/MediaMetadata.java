@@ -1,27 +1,38 @@
 package com.sevyh.sevyhchatmediaservice.api.model;
 
+import java.time.Instant;
 import java.util.UUID;
 
+import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 @Table("media_metadata")
 public class MediaMetadata {
 
-    @PrimaryKey
+    @PrimaryKey("media_id")
     private UUID id;
+    @Column("conversation_id")
+    private UUID conversationId;
+    @Column("media_type")
     private String mediaType;
+    @Column("size")
     private long size;
-    private String url;
+    @Column("file_location")
+    private String fileLocation;
+    @Column("timestamp")
+    private Instant timestamp;
 
     public MediaMetadata() {
     }
 
-    public MediaMetadata(UUID id, String mediaType, long size, String url) {
+    public MediaMetadata(UUID id, UUID conversationId, String mediaType, long size, String fileLocation, Instant timestamp) {
         this.id = id;
+        this.conversationId = conversationId;
         this.mediaType = mediaType;
         this.size = size;
-        this.url = url;
+        this.fileLocation = fileLocation;
+        this.timestamp = timestamp;
     }
 
     public UUID getId() {
@@ -30,6 +41,14 @@ public class MediaMetadata {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(UUID conversationId) {
+        this.conversationId = conversationId;
     }
 
     public String getMediaType() {
@@ -48,12 +67,20 @@ public class MediaMetadata {
         this.size = size;
     }
 
-    public String getUrl() {
-        return url;
+    public String getfileLocation() {
+        return fileLocation;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setfileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
     }
 
 }

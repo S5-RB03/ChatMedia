@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "CREATE KEYSPACE IF NOT EXISTS chatmedia_keyspace WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};" > schema.cql
           echo "USE chatmedia_keyspace;" >> schema.cql
-          echo "CREATE TABLE IF NOT EXISTS media_metadata (id UUID PRIMARY KEY, media_type TEXT, size BIGINT, url TEXT);" >> schema.cql
+           echo "CREATE TABLE IF NOT EXISTS media_metadata (conversation_id UUID, media_id UUID, media_type TEXT, size BIGINT, file_location TEXT, timestamp TIMESTAMP, PRIMARY KEY(conversation_id, timestamp)) WITH CLUSTERING ORDER BY (timestamp DESC);" >> schema.cql
           docker run --rm --network container:cassandra -v ${PWD}:/workspace -w /workspace --entrypoint=cqlsh cassandra -f schema.cql
       - name: Build and test
         env:

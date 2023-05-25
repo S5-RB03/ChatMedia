@@ -1,6 +1,7 @@
 package com.sevyh.sevyhchatmediaservice.service.impl;
 
 import com.sevyh.sevyhchatmediaservice.api.model.MediaMetadata;
+import com.sevyh.sevyhchatmediaservice.messaging.RabbitMQSender;
 import com.sevyh.sevyhchatmediaservice.repository.MediaMetadataRepository;
 import com.sevyh.sevyhchatmediaservice.service.MediaStorageService;
 

@@ -3,8 +3,11 @@ package com.sevyh.sevyhchatmediaservice.api;
 import com.sevyh.sevyhchatmediaservice.api.model.ApiResponse;
 import com.sevyh.sevyhchatmediaservice.api.model.Message;
 import com.sevyh.sevyhchatmediaservice.api.model.MessageType;
+import com.sevyh.sevyhchatmediaservice.messaging.RabbitMQSender;
 import com.sevyh.sevyhchatmediaservice.api.model.MediaMetadata;
 import com.sevyh.sevyhchatmediaservice.service.ChatMediaService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/chatmedia")
 public class ChatMediaController {
+
+    @Autowired
+    private RabbitMQSender rabbitMQSender;
 
     private final ChatMediaService chatMediaService;
 
@@ -32,6 +38,7 @@ public class ChatMediaController {
             @RequestParam("media") MultipartFile media) {
         Instant timestamp = Instant.now();
         Message Message = chatMediaService.createMessageWithMedia(senderId, receiverId, textContent, timestamp, messageType, media);
+        rabbitMQSender.send(Message);
         ApiResponse<Message> response = new ApiResponse<>(true, "Chat message created successfully", Message);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
